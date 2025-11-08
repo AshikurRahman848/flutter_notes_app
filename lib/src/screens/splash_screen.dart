@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Splash screen displayed while Firebase initializes.
 /// This screen shows a loading indicator and app branding.
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

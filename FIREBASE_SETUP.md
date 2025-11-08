@@ -26,30 +26,52 @@ This document provides a step-by-step guide to setting up the Firebase backend f
 4.  Choose a location for your Firestore data.
 5.  Click **Enable**.
 
-#### Firestore Security Rules
+#### Firestore Security Rules (secure)
 
-To ensure users can only read and write their own notes, you must set up the following security rules.
+To ensure users can only create/read/update/delete their own notes, use the rules below. They
+require that:
 
-1.  In the Firestore Database section, go to the **Rules** tab.
-2.  Replace the existing rules with the following:
+- The client is authenticated for any operation.
+- A note's `userId` must match the authenticated user's UID for read/update/delete.
+- When creating a note, the supplied `userId` must match the current auth UID (prevents creating
+  notes on behalf of other users).
 
-    ```firestore
-    rules_version = '2';
-    service cloud.firestore {
-      match /databases/{database}/documents {
-        // Allow read/write access to notes only if the user is authenticated
-        // and the note's 'userId' field matches the authenticated user's UID.
-        match /notes/{noteId} {
-          allow read, create: if request.auth != null;
-          allow update, delete: if request.auth != null && request.resource.data.userId == request.auth.uid;
-        }
-      }
+1. In the Firestore Database section, go to the **Rules** tab.
+2. Replace the existing rules with the following and **Publish**:
+
+```firestore
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /notes/{noteId} {
+      // Only authenticated users may create notes and the note must belong to them
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.keys().hasAll(['content','userId','createdAt','updatedAt']);
+
+      // Only the owner can read their note
+      allow read: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+
+      // Only the owner can update or delete their note
+      allow update, delete: if request.auth != null
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
     }
-    ```
+  }
+}
+```
 
-    **Note:** The `create` rule is set to `if request.auth != null` to allow any authenticated user to create a note. The `update` and `delete` rules are stricter, ensuring the user ID in the note matches the authenticated user's ID.
+Notes:
+- The `hasAll([...])` check on create is optional but helps ensure required fields are present.
+- These rules prevent any authenticated user from reading or modifying another user's notes.
 
-3.  Click **Publish**.
+3. Test your rules with the Firebase Emulator or the Firestore Rules Simulator.
+
+Security reminders
+- Do NOT commit service-account JSON files or other server-side secrets into the repository.
+- Consider enabling Firebase App Check to reduce risk of backend abuse from forged clients.
+- Optionally restrict API key usage in the Google Cloud Console for additional safety.
 
 ## 3. Connect Flutter App to Firebase
 

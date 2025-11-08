@@ -22,23 +22,23 @@ void main() async {
 
   // Catch uncaught asynchronous errors (timers, futures, isolates)
   PlatformDispatcher.instance.onError = (error, stack) {
-    // ignore: avoid_print
-    print('Uncaught platform error: $error\n$stack');
+    // Use debugPrint so analyzer doesn't warn about `print` in production code.
+    debugPrint('Uncaught platform error: $error\n$stack');
     return true; // handled
   };
 
   runZonedGuarded(() {
     runApp(const MyApp());
   }, (error, stack) {
-    // ignore: avoid_print
-    print('Uncaught zone error: $error\n$stack');
+    // Use debugPrint to avoid analyzer avoid_print lint while still logging during development.
+    debugPrint('Uncaught zone error: $error\n$stack');
   });
 }
 
 /// Main application widget.
 /// Initializes Firebase (with loading & error states), sets up Providers, and handles routing.
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
