@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_notes_app/src/providers/auth_provider.dart';
 import 'package:flutter_notes_app/src/providers/notes_provider.dart';
+import 'package:flutter_notes_app/src/providers/settings_provider.dart';
+import 'package:flutter_notes_app/src/localization/app_localizations.dart';
 import 'package:flutter_notes_app/src/models/note_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,16 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        title: Text(AppLocalizations.of(context).t('logout')),
+        content: Text(AppLocalizations.of(context).t('logout_confirm')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context).t('cancel')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Logout'),
+            child: Text(AppLocalizations.of(context).t('logout')),
           ),
         ],
       ),
@@ -67,9 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _handleAddNote() async {
     if (_noteController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a note'),
-          backgroundColor: Colors.orange,
+        SnackBar(
+          content: Text(AppLocalizations.of(context).t('please_enter_note')),
         ),
       );
       return;
@@ -81,9 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User not authenticated'),
-          backgroundColor: Colors.red,
+        SnackBar(
+          content: Text(AppLocalizations.of(context).t('user_not_authenticated')),
         ),
       );
       return;
@@ -95,12 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (mounted) {
-      if (success) {
+        if (success) {
         _noteController.clear();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Note added successfully'),
-            backgroundColor: Colors.green,
+          SnackBar(
+            content: Text(AppLocalizations.of(context).t('note_added_successfully')),
           ),
         );
       } else {
@@ -109,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
             content: Text(
               notesProvider.errorMessage ?? 'Failed to add note',
             ),
-            backgroundColor: Colors.red,
           ),
         );
       }
@@ -121,16 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Note'),
-        content: const Text('Are you sure you want to delete this note?'),
+        title: Text(AppLocalizations.of(context).t('delete_note')),
+        content: Text(AppLocalizations.of(context).t('delete_confirm')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context).t('cancel')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(AppLocalizations.of(context).t('delete')),
           ),
         ],
       ),
@@ -143,9 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Note deleted successfully'),
-              backgroundColor: Colors.green,
+            SnackBar(
+              content: Text(AppLocalizations.of(context).t('note_deleted_successfully')),
             ),
           );
         } else {
@@ -154,7 +151,6 @@ class _HomeScreenState extends State<HomeScreen> {
               content: Text(
                 notesProvider.errorMessage ?? 'Failed to delete note',
               ),
-              backgroundColor: Colors.red,
             ),
           );
         }
@@ -184,12 +180,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final userId = authProvider.user?.uid;
 
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      // allow theme to control scaffold background
       appBar: AppBar(
-        title: const Text('My Notes'),
-        backgroundColor: Colors.blue.shade700,
+        title: Text(AppLocalizations.of(context).t('my_notes')),
+        // use theme's AppBar colors
         elevation: 0,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => _openSettings(context),
+            tooltip: 'Settings',
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: _handleLogout,
@@ -201,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // User email display
           Container(
-            color: Colors.blue.shade700,
+            color: Theme.of(context).colorScheme.primary,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
@@ -216,15 +217,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Logged in as',
+                        AppLocalizations.of(context).t('Login as'),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.white70,
+                              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.9),
                             ),
                       ),
                       Text(
                         authProvider.userEmail ?? 'Unknown',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                         overflow: TextOverflow.ellipsis,
@@ -272,14 +273,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: TextField(
                                     controller: _noteController,
                                     decoration: InputDecoration(
-                                      hintText: 'Add a new note...',
+                                      hintText: AppLocalizations.of(context).t('add_new_note'),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
+                                          color: Theme.of(context).dividerColor,
                                         ),
                                       ),
                                       contentPadding: const EdgeInsets.symmetric(
@@ -293,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(width: 8),
                                 FloatingActionButton(
                                   onPressed: _handleAddNote,
-                                  backgroundColor: Colors.blue.shade700,
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
                                   child: const Icon(Icons.add),
                                 ),
                               ],
@@ -309,28 +310,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Icon(
-                                          Icons.note_outlined,
-                                          size: 64,
-                                          color: Colors.grey.shade400,
-                                        ),
+                                            Icons.note_outlined,
+                                            size: 64,
+                                            color: Theme.of(context).disabledColor,
+                                          ),
                                         const SizedBox(height: 16),
                                         Text(
-                                          'No notes yet',
+                                          AppLocalizations.of(context).t('no_notes_yet'),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
-                                                color: Colors.grey.shade600,
+                                                color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
                                               ),
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          'Add your first note to get started',
+                                          AppLocalizations.of(context).t('add_first_note'),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall
                                               ?.copyWith(
-                                                color: Colors.grey.shade500,
+                                                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
                                               ),
                                         ),
                                       ],
@@ -382,8 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         .textTheme
                                                         .bodySmall
                                                         ?.copyWith(
-                                                          color: Colors
-                                                              .grey.shade600,
+                                                          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
                                                         ),
                                                   ),
                                                   IconButton(
@@ -391,11 +391,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         _handleDeleteNote(
                                                           note.id,
                                                         ),
-                                                    icon: const Icon(
-                                                      Icons.delete_outline,
-                                                      color: Colors.red,
-                                                      size: 20,
-                                                    ),
+                                                        icon: Icon(
+                                                          Icons.delete_outline,
+                                                          color: Theme.of(context).colorScheme.error,
+                                                          size: 20,
+                                                        ),
                                                     padding: EdgeInsets.zero,
                                                     constraints:
                                                         const BoxConstraints(),
@@ -416,6 +416,57 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _openSettings(BuildContext context) {
+    final settings = context.read<SettingsProvider>();
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (context) {
+        final sp = context.watch<SettingsProvider>();
+        final isDark = sp.themeMode == ThemeMode.dark;
+        final isEnglish = sp.locale.languageCode == 'en';
+
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context).t('settings'),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 12),
+              SwitchListTile(
+                title: Text(AppLocalizations.of(context).t('dark_mode')),
+                value: isDark,
+                onChanged: (v) => settings.toggleDarkMode(v),
+              ),
+              const SizedBox(height: 8),
+              Text(AppLocalizations.of(context).t('language')),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  ChoiceChip(
+                    label: Text(AppLocalizations.of(context).t('english')),
+                    selected: isEnglish,
+                    onSelected: (_) => settings.setLocale(const Locale('en')),
+                  ),
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: Text(AppLocalizations.of(context).t('bangla')),
+                    selected: !isEnglish,
+                    onSelected: (_) => settings.setLocale(const Locale('bn')),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
     );
   }
 }

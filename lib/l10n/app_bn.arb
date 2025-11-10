@@ -1,0 +1,31 @@
+{
+  "@@locale": "bn",
+  "app_title": "ফ্লাটার নোটস অ্যাপ",
+  "my_notes": "আমার নোটস",
+  "settings": "সেটিংস",
+  "dark_mode": "ডার্ক মোড",
+  "language": "ভাষা",
+  "english": "ইংরেজি",
+  "bangla": "বাংলা",
+  "no_notes_yet": "এখনো কোনো নোট নেই",
+  "add_first_note": "শুরু করতে আপনার প্রথম নোটটি যোগ করুন",
+  "please_enter_note": "অনুগ্রহ করে একটি নোট লিখুন",
+  "user_not_authenticated": "ব্যবহারকারী যাচাই করা হয়নি",
+  "note_added_successfully": "নোট সফলভাবে যোগ করা হয়েছে",
+  "note_deleted_successfully": "নোট সফলভাবে মুছে ফেলা হয়েছে",
+  "delete_note": "নোট মুছুন",
+  "cancel": "বাতিল",
+  "delete": "মুছুন",
+  "logout": "লগআউট",
+  "logout_confirm": "আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?",
+  "delete_confirm": "আপনি কি নিশ্চিত যে আপনি এই নোটটি মুছে ফেলবেন?",
+  "add_new_note_hint": "নতুন নোট যোগ করুন...",
+  "logged_in_as": "হিসাবে লগ ইন করেছেন",
+  "failed_to_add_note": "নোট যোগ করা যায়নি",
+  "failed_to_delete_note": "নোট মুছা যায়নি"
+  ,
+  "loading": "লোড হচ্ছে..."
+  ,
+  "login": "আপনার অ্যাকাউন্টে সাইন ইন করুন",
+  "signup": "অ্যাকাউন্ট তৈরি করুন"
+}

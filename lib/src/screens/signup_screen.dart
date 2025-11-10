@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_notes_app/src/providers/auth_provider.dart';
+import 'package:flutter_notes_app/src/localization/app_localizations.dart';
 class SignUpScreen extends StatefulWidget {
   final VoidCallback onLoginTap;
 
@@ -97,11 +98,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!mounted) return;
 
     if (success) {
-      // Show success message
+      // Show success message (use themed snackbar)
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Account created successfully!'),
-          backgroundColor: Colors.green,
+        SnackBar(
+          content: const Text('Account created successfully!'),
         ),
       );
     } else {
@@ -109,7 +109,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(authProvider.errorMessage ?? 'Sign up failed'),
-          backgroundColor: Colors.red,
         ),
       );
     }
@@ -118,7 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -130,23 +129,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Icon(
                 Icons.note_outlined,
                 size: 64,
-                color: Colors.blue.shade700,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(height: 24),
               Text(
-                'Create Account',
+                AppLocalizations.of(context).t('signup'),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade900,
+                      color: Theme.of(context).textTheme.headlineSmall?.color,
                     ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Sign up to get started',
+                AppLocalizations.of(context).t('signup'),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey.shade600,
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
                     ),
               ),
               const SizedBox(height: 32),
@@ -167,10 +166,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Colors.grey.shade300,
+                            color: Theme.of(context).dividerColor,
                           ),
                         ),
                       ),
@@ -201,10 +200,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Colors.grey.shade300,
+                            color: Theme.of(context).dividerColor,
                           ),
                         ),
                       ),
@@ -252,8 +251,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return ElevatedButton(
                           onPressed: authProvider.isLoading ? null : _handleSignUp,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade700,
-                            disabledBackgroundColor: Colors.grey.shade300,
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            disabledBackgroundColor: Theme.of(context).disabledColor,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -302,7 +301,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       'Sign In',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade700,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                     ),
                   ),

@@ -1,0 +1,31 @@
+{
+  "@@locale": "en",
+  "app_title": "Flutter Notes App",
+  "my_notes": "My Notes",
+  "settings": "Settings",
+  "dark_mode": "Dark mode",
+  "language": "Language",
+  "english": "English",
+  "bangla": "Bangla",
+  "no_notes_yet": "No notes yet",
+  "add_first_note": "Add your first note to get started",
+  "please_enter_note": "Please enter a note",
+  "user_not_authenticated": "User not authenticated",
+  "note_added_successfully": "Note added successfully",
+  "note_deleted_successfully": "Note deleted successfully",
+  "delete_note": "Delete Note",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "logout": "Logout",
+  "logout_confirm": "Are you sure you want to logout?",
+  "delete_confirm": "Are you sure you want to delete this note?",
+  "add_new_note_hint": "Add a new note...",
+  "logged_in_as": "Logged in as",
+  "failed_to_add_note": "Failed to add note",
+  "failed_to_delete_note": "Failed to delete note"
+  ,
+  "loading": "Loading..."
+  ,
+  "login": "Sign in to your account",
+  "signup": "Create Account"
+}

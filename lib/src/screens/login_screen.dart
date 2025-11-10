@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_notes_app/src/providers/auth_provider.dart';
+import 'package:flutter_notes_app/src/localization/app_localizations.dart';
 class LoginScreen extends StatefulWidget {
   final VoidCallback onSignUpTap;
 
@@ -74,11 +75,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (!success) {
-      // Show error message
+      // Show error message (use theme's snackbar styling)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(authProvider.errorMessage ?? 'Login failed'),
-          backgroundColor: Colors.red,
         ),
       );
     }
@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -99,23 +99,23 @@ class _LoginScreenState extends State<LoginScreen> {
               Icon(
                 Icons.note_outlined,
                 size: 64,
-                color: Colors.blue.shade700,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(height: 24),
               Text(
-                'Welcome Back',
+                AppLocalizations.of(context).t('app_title'),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade900,
+                      color: Theme.of(context).textTheme.headlineSmall?.color,
                     ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Sign in to your account',
+                AppLocalizations.of(context).t('login'),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey.shade600,
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
                     ),
               ),
               const SizedBox(height: 32),
@@ -136,10 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Colors.grey.shade300,
+                            color: Theme.of(context).dividerColor,
                           ),
                         ),
                       ),
@@ -170,10 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Colors.grey.shade300,
+                            color: Theme.of(context).dividerColor,
                           ),
                         ),
                       ),
@@ -187,8 +187,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         return ElevatedButton(
                           onPressed: authProvider.isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade700,
-                            disabledBackgroundColor: Colors.grey.shade300,
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            disabledBackgroundColor: Theme.of(context).disabledColor,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

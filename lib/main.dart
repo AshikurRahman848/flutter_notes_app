@@ -11,18 +11,25 @@ import 'src/screens/splash_screen.dart';
 import 'src/screens/login_screen.dart';
 import 'src/screens/signup_screen.dart';
 import 'src/screens/home_screen.dart';
+import 'src/theme/app_theme.dart';
+import 'src/localization/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'src/providers/settings_provider.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  FlutterError.onError = (details) {
-    FlutterError.dumpErrorToConsole(details);
-  };
-  PlatformDispatcher.instance.onError = (error, stack) {
-    debugPrint('Uncaught platform error: $error\n$stack');
-    return true; // handled
-  };
-
+void main() {
+  // Run the app inside a single zone so bindings are initialized and runApp
+  // execute within the same zone (fixes "Zone mismatch" error).
   runZonedGuarded(() {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    FlutterError.onError = (details) {
+      FlutterError.dumpErrorToConsole(details);
+    };
+    PlatformDispatcher.instance.onError = (error, stack) {
+      debugPrint('Uncaught platform error: $error\n$stack');
+      return true; // handled
+    };
+
     runApp(const MyApp());
   }, (error, stack) {
     debugPrint('Uncaught zone error: $error\n$stack');
@@ -63,9 +70,23 @@ class _MyAppState extends State<MyApp> {
       future: _firebaseInit,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const MaterialApp(
+          // Provide localization delegates and supported locales to the
+          // temporary MaterialApp so widgets like SplashScreen can access
+          // AppLocalizations while Firebase initializes.
+          return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: SplashScreen(),
+            // Theme wiring so SplashScreen can use Theme.of(context)
+            theme: AppTheme.lightTheme(),
+            darkTheme: AppTheme.darkTheme(),
+            // Localization wiring
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en'), Locale('bn')],
+            home: const SplashScreen(),
           );
         }
         if (snapshot.hasError) {
@@ -102,14 +123,34 @@ class _MyAppState extends State<MyApp> {
           providers: [
             ChangeNotifierProvider(create: (_) => AuthProvider()),
             ChangeNotifierProvider(create: (_) => NotesProvider()),
+              ChangeNotifierProvider(create: (_) => SettingsProvider()),
           ],
-          child: MaterialApp(
+          child: Consumer<SettingsProvider>(
+            builder: (context, settingsProvider, _) {
+              final sp = settingsProvider;
+              return MaterialApp(
+                locale: sp.locale,
+                themeMode: sp.themeMode,
             debugShowCheckedModeBanner: false,
             title: 'Flutter Notes App',
-            theme: ThemeData(
-              useMaterial3: true,
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-            ),
+            // Theme wiring
+            theme: AppTheme.lightTheme(),
+            darkTheme: AppTheme.darkTheme(),
+            // Localization wiring
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en'), Locale('bn')],
+            localeResolutionCallback: (locale, supportedLocales) {
+              if (locale == null) return supportedLocales.first;
+              for (final supported in supportedLocales) {
+                if (supported.languageCode == locale.languageCode) return supported;
+              }
+              return supportedLocales.first;
+            },
             home: Consumer<AuthProvider>(
               builder: (context, auth, _) {
                 if (auth.isLoggedIn) {
@@ -122,6 +163,8 @@ class _MyAppState extends State<MyApp> {
                     : SignUpScreen(onLoginTap: () => setState(() => _isLoginScreen = true));
               },
             ),
+              );
+            },
           ),
         );
       },

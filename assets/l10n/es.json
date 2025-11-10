@@ -1,0 +1,16 @@
+{
+  "app_title": "Aplicación de Notas",
+  "initialization_error": "Error de inicialización",
+  "retry": "Reintentar",
+  "login": "Iniciar sesión",
+  "signup": "Registrarse",
+  "home": "Inicio",
+  "notes": "Notas",
+  "logout": "Cerrar sesión",
+  "loading": "Cargando..."
+  ,"settings": "Ajustes",
+  "dark_mode": "Modo oscuro",
+  "language": "Idioma",
+  "english": "Inglés",
+  "spanish": "Español"
+}
