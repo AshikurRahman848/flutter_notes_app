@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-
-/// Splash screen displayed while Firebase initializes.
-/// This screen shows a loading indicator and app branding.
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 

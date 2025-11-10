@@ -4,10 +4,7 @@ import 'package:flutter_notes_app/src/providers/auth_provider.dart';
 import 'package:flutter_notes_app/src/providers/notes_provider.dart';
 import 'package:flutter_notes_app/src/models/note_model.dart';
 
-/// Home screen displaying user's notes and note management functionality.
-/// Users can view their email, add new notes, view existing notes, and delete notes.
 class HomeScreen extends StatefulWidget {
-  /// Callback function to handle logout.
   final VoidCallback onLogout;
 
   const HomeScreen({
@@ -20,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  /// Controller for the note input field.
   late TextEditingController _noteController;
 
   @override
@@ -34,10 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _noteController.dispose();
     super.dispose();
   }
-
-  /// Handle logout button press.
   Future<void> _handleLogout() async {
-    // Show confirmation dialog
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -59,8 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (confirmed == true && mounted) {
       final authProvider = context.read<AuthProvider>();
       final notesProvider = context.read<NotesProvider>();
-
-      // Clear notes from provider
       notesProvider.clearNotes();
 
       // Sign out

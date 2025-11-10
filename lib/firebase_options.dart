@@ -1,6 +1,3 @@
-// File generated-like: Firebase configuration options used by Firebase.initializeApp.
-// These values are sourced from android/app/google-services.json and ios/Runner/GoogleService-Info.plist.
-
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
@@ -27,7 +24,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  // Android Firebase configuration from google-services.json
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCGqe6wcDkOgOntm1w9fNSkUcr47lHyav0',
     appId: '1:812441097745:android:21c960a29de01b42fe83b0',

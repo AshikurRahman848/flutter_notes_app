@@ -1,39 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_notes_app/src/models/note_model.dart';
 import 'package:flutter_notes_app/src/services/firestore_service.dart';
-
-/// Provider class for managing notes state.
-/// This class extends ChangeNotifier to provide reactive state management using Provider.
-/// It handles CRUD operations on notes and maintains the list of user notes.
 class NotesProvider extends ChangeNotifier {
-  /// Instance of FirestoreService for database operations.
   final FirestoreService _firestoreService = FirestoreService();
-
-  /// List of notes for the current user.
   List<NoteModel> _notes = [];
-
-  /// Flag indicating if notes are being loaded.
   bool _isLoading = false;
-
-  /// Error message from the last failed operation.
   String? _errorMessage;
-
-  /// Getters for accessing state from the UI.
   List<NoteModel> get notes => _notes;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-
-  /// Clear any error messages.
   void clearError() {
     _errorMessage = null;
     notifyListeners();
   }
-
-  /// Load notes for a specific user from Firestore.
-  /// This fetches notes once and updates the local list.
-  /// 
-  /// Parameters:
-  /// - [userId]: The UID of the user whose notes to load.
   Future<void> loadNotes({required String userId}) async {
     _isLoading = true;
     _errorMessage = null;
@@ -49,25 +28,9 @@ class NotesProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  /// Get a stream of notes for real-time updates.
-  /// This method returns a stream that emits note list updates whenever data changes in Firestore.
-  /// 
-  /// Parameters:
-  /// - [userId]: The UID of the user whose notes to stream.
-  /// 
-  /// Returns: A Stream of lists of NoteModel objects.
   Stream<List<NoteModel>> getNotesStream({required String userId}) {
     return _firestoreService.getUserNotesStream(userId: userId);
   }
-
-  /// Add a new note to Firestore.
-  /// 
-  /// Parameters:
-  /// - [content]: The text content of the note.
-  /// - [userId]: The UID of the user creating the note.
-  /// 
-  /// Returns: true if the note was added successfully, false otherwise.
   Future<bool> addNote({
     required String content,
     required String userId,

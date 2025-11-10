@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_notes_app/src/providers/auth_provider.dart';
-
-/// Sign up screen for new user registration.
-/// Users can enter their email and password to create a new account.
-/// Also provides a link to navigate back to the login screen.
 class SignUpScreen extends StatefulWidget {
-  /// Callback function to navigate back to the login screen.
   final VoidCallback onLoginTap;
 
   const SignUpScreen({

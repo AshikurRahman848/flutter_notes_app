@@ -1,58 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_notes_app/src/services/auth_service.dart';
-
-/// Provider class for managing authentication state.
-/// This class extends ChangeNotifier to provide reactive state management using Provider.
-/// It handles user authentication, session persistence, and error states.
 class AuthProvider extends ChangeNotifier {
-  /// Instance of AuthService for Firebase operations.
   final AuthService _authService = AuthService();
-
-  /// The currently authenticated user, or null if not logged in.
   User? _user;
-
-  /// Flag indicating if an authentication operation is in progress.
   bool _isLoading = false;
-
-  /// Error message from the last failed authentication operation.
   String? _errorMessage;
-
-  /// Getters for accessing state from the UI.
   User? get user => _user;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get isLoggedIn => _user != null;
   String? get userEmail => _user?.email;
-
-  /// Constructor that initializes the provider and sets up auth state listener.
   AuthProvider() {
     _initializeAuthState();
   }
 
-  /// Initialize authentication state by listening to Firebase auth changes.
-  /// This ensures the user stays logged in after app restart.
   void _initializeAuthState() {
     _authService.authStateChanges.listen((User? user) {
       _user = user;
       notifyListeners();
     });
   }
-
-  /// Clear any error messages.
   void clearError() {
     _errorMessage = null;
     notifyListeners();
   }
-
-  /// Sign up a new user with email and password.
-  /// 
-  /// Parameters:
-  /// - [email]: The user's email address.
-  /// - [password]: The user's password.
-  /// 
-  /// Returns: true if signup was successful, false otherwise.
-  /// Error details are stored in [_errorMessage].
   Future<bool> signUp({
     required String email,
     required String password,
@@ -82,15 +54,6 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
-
-  /// Sign in an existing user with email and password.
-  /// 
-  /// Parameters:
-  /// - [email]: The user's email address.
-  /// - [password]: The user's password.
-  /// 
-  /// Returns: true if login was successful, false otherwise.
-  /// Error details are stored in [_errorMessage].
   Future<bool> signIn({
     required String email,
     required String password,
@@ -120,10 +83,6 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
-
-  /// Sign out the currently authenticated user.
-  /// 
-  /// Returns: true if logout was successful, false otherwise.
   Future<bool> signOut() async {
     _isLoading = true;
     _errorMessage = null;
@@ -142,13 +101,6 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
-
-  /// Convert Firebase Auth error codes to user-friendly error messages.
-  /// 
-  /// Parameters:
-  /// - [errorCode]: The Firebase Auth error code.
-  /// 
-  /// Returns: A user-friendly error message.
   String _getErrorMessage(String errorCode) {
     switch (errorCode) {
       case 'weak-password':

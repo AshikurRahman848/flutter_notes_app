@@ -14,15 +14,10 @@ import 'src/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Surface all Flutter framework errors to console
   FlutterError.onError = (details) {
     FlutterError.dumpErrorToConsole(details);
   };
-
-  // Catch uncaught asynchronous errors (timers, futures, isolates)
   PlatformDispatcher.instance.onError = (error, stack) {
-    // Use debugPrint so analyzer doesn't warn about `print` in production code.
     debugPrint('Uncaught platform error: $error\n$stack');
     return true; // handled
   };
@@ -30,13 +25,9 @@ void main() async {
   runZonedGuarded(() {
     runApp(const MyApp());
   }, (error, stack) {
-    // Use debugPrint to avoid analyzer avoid_print lint while still logging during development.
     debugPrint('Uncaught zone error: $error\n$stack');
   });
 }
-
-/// Main application widget.
-/// Initializes Firebase (with loading & error states), sets up Providers, and handles routing.
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -71,15 +62,12 @@ class _MyAppState extends State<MyApp> {
     return FutureBuilder<FirebaseApp>(
       future: _firebaseInit,
       builder: (context, snapshot) {
-        // Loading: show your splash while Firebase initializes
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const MaterialApp(
             debugShowCheckedModeBanner: false,
             home: SplashScreen(),
           );
         }
-
-        // Error: show a readable error so you don't just "lose connection"
         if (snapshot.hasError) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -99,7 +87,7 @@ class _MyAppState extends State<MyApp> {
                       const SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: () => setState(() {
-                          _firebaseInit = _initFirebase(); // retry
+                          _firebaseInit = _initFirebase(); 
                         }),
                         child: const Text('Retry'),
                       ),
@@ -110,8 +98,6 @@ class _MyAppState extends State<MyApp> {
             ),
           );
         }
-
-        // Ready: build the real app with Providers
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => AuthProvider()),

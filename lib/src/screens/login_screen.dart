@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_notes_app/src/providers/auth_provider.dart';
-
-/// Login screen for user authentication.
-/// Users can enter their email and password to sign in.
-/// Also provides a link to navigate to the signup screen.
 class LoginScreen extends StatefulWidget {
-  /// Callback function to navigate to the signup screen.
   final VoidCallback onSignUpTap;
 
   const LoginScreen({
@@ -19,10 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  /// Form key for validation.
   final _formKey = GlobalKey<FormState>();
-
-  /// Controllers for email and password input fields.
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
@@ -42,8 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
-
-  /// Validate email format.
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Email is required';
@@ -64,10 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     return null;
   }
-
-  /// Handle login button press.
   Future<void> _handleLogin() async {
-    // Clear any previous error messages
     if (mounted) {
       context.read<AuthProvider>().clearError();
     }
