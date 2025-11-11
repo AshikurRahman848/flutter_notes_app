@@ -80,7 +80,7 @@ The application allows users to:
 
 | Component | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Framework** | Flutter 3.x+ | Cross-platform mobile development |
+| **Framework** | Flutter 3.32 | Cross-platform mobile development |
 | **Authentication** | Firebase Auth | User sign-up, login, and session management |
 | **Database** | Cloud Firestore | NoSQL database for storing user-specific notes |
 | **State Management** | Provider | Simple, scalable, and reactive state management |
