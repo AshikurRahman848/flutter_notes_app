@@ -72,14 +72,6 @@ class NotesProvider extends ChangeNotifier {
       return false;
     }
   }
-
-  /// Update an existing note.
-  /// 
-  /// Parameters:
-  /// - [noteId]: The ID of the note to update.
-  /// - [content]: The new content for the note.
-  /// 
-  /// Returns: true if the note was updated successfully, false otherwise.
   Future<bool> updateNote({
     required String noteId,
     required String content,
@@ -120,13 +112,6 @@ class NotesProvider extends ChangeNotifier {
       return false;
     }
   }
-
-  /// Delete a note from Firestore.
-  /// 
-  /// Parameters:
-  /// - [noteId]: The ID of the note to delete.
-  /// 
-  /// Returns: true if the note was deleted successfully, false otherwise.
   Future<bool> deleteNote({required String noteId}) async {
     _isLoading = true;
     _errorMessage = null;
@@ -148,9 +133,6 @@ class NotesProvider extends ChangeNotifier {
       return false;
     }
   }
-
-  /// Clear all notes from the local list.
-  /// This is typically called when a user logs out.
   void clearNotes() {
     _notes = [];
     _errorMessage = null;
